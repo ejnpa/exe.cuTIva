@@ -109,31 +109,26 @@ window.showAlerts = function(message, type = 'sucesso') {
 };
 
 window.toggleLike = async function (button, noteId) {
-
-
     if (!localStorage.getItem('user')){
-        const msg = window.AppLanguage ? window.AppLanguage.get('erro-login-like'):'';
-        window.showAlerts(msg, 'erro');
+        const message = window.AppLanguage ? window.AppLanguage.get('erro-login-like'):'';
+        window.showAlerts(message, 'erro');
         return;
     }
 
+    const currentlyLiked = button.classList.contains('is-liked');
+
     try{
-        const data = await notesService.toggleLike(noteId);
+        const data = await notesService.setLike(noteId, !currentlyLiked);
         const countSpan = button.querySelector('.like-count');
 
-        if(data.liked){
-            button.classList.add('is-liked');
-        }else{
-            button.classList.remove('is-liked');
-        }
+        button.classList.toggle("is-liked", data.liked);
 
-        const newCount = data.likes_count !== 'undefined' ? data.likes_count : data.likes;
-        if (countSpan && newCount !== 'undefined') {
-            countSpan.textContent = newCount;
+        if (countSpan && Number.isFinite(Number(data.likes_count))) {
+            countSpan.textContent = String(data.likes_count);
         }
     }catch(error){
         console.error("Erro no toggleLike:", error);
-        const errMsg = window.AppLanguage?window.AppLanguage.get('erro-like'):'Erro de comunicação com o servidor.';
-        window.showAlerts(errMsg, 'erro');
+        window.showAlerts("Não foi possível atualizar o gosto.",
+            "erro");
     }
 }

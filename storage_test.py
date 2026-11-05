@@ -1,7 +1,7 @@
+import os
 from azure.storage.blob import BlobServiceClient
 
-# A tua string com o IP do Tailscale
-connection_string = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://100.89.13.43:10000/devstoreaccount1;QueueEndpoint=http://100.89.13.43:10001/devstoreaccount1;TableEndpoint=http://100.89.13.43:10002/devstoreaccount1;"
+connection_string = os.environ["AZURITE_CONNECTION_STRING"]
 
 try:
     print("A ligar ao Azurite no Desktop via Tailscale...")

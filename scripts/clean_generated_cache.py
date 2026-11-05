@@ -1,10 +1,9 @@
-from database import sessionLocal
-from storage import get_storage_provider
-from repositories.generated_cache_repository import GeneratedCacheRepository
-from config import settings
+
 
 
 def main() -> None:
+    """Abre uma sessão da base de dados, seleciona o fornecedor de armazenamento e remove os artefactos expirados não guardados. Fecha sempre a sessão no bloco finally.
+    """
     db = sessionLocal()
     
     try:
@@ -14,7 +13,7 @@ def main() -> None:
             ttl_days= settings.generated_cache_ttl_days
         )
 
-        deleted_count = repository.delete_expired(storage)
+        deleted_count = repo.delete_expired(storage)
         print(f"Artefactos expirados eliminados: {deleted_count}")
     finally:
         db.close()

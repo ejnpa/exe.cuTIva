@@ -17,4 +17,6 @@ azurite_db*.json
 .idea/
 .DS_Store
 azurite_data/
-ollama_models/
+olla*.tfstate
+*.tfstate.*
+.terraform/ma_models/

@@ -25,6 +25,9 @@
           - "--exclude=infrastructure/.terraform"
           - "--exclude=media"
           - "--exclude=*.pyc"
+          - "--exclude=.env"
+          - "--exclude= infrastructure/terraform.tfstate"
+          - "--exclude= infrastructure/.terraform"
       become: false   
       
     - name: Reconstruir e levantar infraestrutura Docker

@@ -15,6 +15,13 @@ const state = {
 
 let currentAbortController = null;
 
+function abortInclusiveRequest(){
+    if (currentAbortController){
+        currentAbortController.abort();
+        currentAbortController = null;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
 
@@ -146,6 +153,8 @@ async function openDocumentModal(id, viewMode = 'original') {
         return;
     } 
 
+    abortInclusiveRequest();
+
     state.activeNote = note;
     
 
@@ -223,6 +232,8 @@ function closeModal() {
 function showOriginalNote() {
     if (!state.activeNote) return;
 
+    abortInclusiveRequest()
+
     state.currentView = 'original';
 
     const iframe = document.getElementById('visualizador-pdf');
@@ -245,6 +256,8 @@ function showOriginalNote() {
  */
 async function generateInclusiveVersion() {
     if (!state.activeNote) return;
+
+    const note = state.activeNote;
 
     state.currentView = 'adapted';
 
@@ -279,11 +292,17 @@ async function generateInclusiveVersion() {
         loadingContainer.style.display = 'flex';
     }
 
-    if (currentAbortController) currentAbortController.abort();
-    currentAbortController = new AbortController();
+    abortInclusiveRequest();
+
+    const controller = new AbortController();
+    currentAbortController = controller;
 
     try {
-        const blob = await notesService.adapt(state.activeNote.id, currentAbortController.signal);
+        const blob = await notesService.adapt(state.activeNote.id, controller.signal);
+
+        if (controller.signal.aborted || state.activeNote !== note || state.currentView !== 'adapted') return;
+
+
         state.adaptedBlobUrl = URL.createObjectURL(blob);
 
         if (iframe) {
@@ -303,7 +322,9 @@ async function generateInclusiveVersion() {
             `;
         }
     } finally {
-        currentAbortController = null;
+        if (currentAbortController === controller) {
+            currentAbortController = null;
+        }
     }
 }
 
@@ -368,7 +389,6 @@ async function toggleTTSAudio() {
     try {
         const targetUrl = notesService.getAudioUrl(state.activeNote.id, state.currentView);
         playerAudio.src = targetUrl;
-        applyTTSSpeed();
         audioContainer.style.display = 'flex';
         if (btnTTS){
             btnTTS.classList.add('is-active');
@@ -392,53 +412,4 @@ async function toggleTTSAudio() {
     }
 }
 
-const TTS_SPEED_KEY='ttsPlaybackRate';
-function applyTTSSpeed(){
-    const playerAudio = document.getElementById('player-audio-tts');
-    const speedSelect = document.getElementById('tts-speed');
 
-    if (!playerAudio || !speedSelect) return;
-
-    const rate = Number(speedSelect.value);
-    if (!Number.isFinite(rate) || rate <= 0) return;
-
-    playerAudio.playbackRate = rate;
-    playerAudio.defaultPlaybackRate = rate;
-    localStorage.setItem(TTS_SPEED_KEY, speedSelect.value);
-
-}
-
-function initTTSSpeed(){
-    const speedSelect = document.getElementById('tts-speed');
-    if (!speedSelect) return;
-
-    const savedSpeed = localStorage.getItem(TTS_SPEED_KEY);
-    const optionExists = [...speedSelect.option]
-        .some(option => option.value === savedSpeed)
-
-    if (optionExists) {
-        speedSelect.value = savedSpeed;
-    }
-
-    speedSelect.addEventListener('change', applyTTSSpeed);
-    applyTTSSpeed();
-}
-
-initTTSSpeed();
-
-async function saveArtifact(kind){
-    if (!state.activeNote) return;
-
-    const variant = kind === 'summary' ? 'adapted' : state.currentView;
-
-    try {
-        await notesService.saveArtifact(state.activeNote.id, kind, variant);
-        showAlerts?.('Guardado na biblioteca.', 'sucesso');
-        
-    } catch (error) {
-        console.error(error);
-        showAlerts?.(error.message, 'erro')
-    }
-
-
-}
