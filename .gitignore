@@ -20,3 +20,4 @@ azurite_data/
 olla*.tfstate
 *.tfstate.*
 .terraform/ma_models/
+.pytest_cache/
