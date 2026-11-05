@@ -19,22 +19,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     window.dados_escola_global = {};
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/notes/structure');
-        if (response.ok) {
-            window.dados_escola_global = await response.json();
-            Object.keys(window.dados_escola_global).forEach(escola => {
-                const op = document.createElement('option');
-                op.value = escola; 
-                op.textContent = escola;
-                selectEscola.appendChild(op);
-        });
-        }
+        window.dados_escola_global = await structureService.getStructure();
+        Object.keys(window.dados_escola_global).forEach(escola => {
+            const op = document.createElement('option');
+            op.value = escola; 
+            op.textContent = escola;
+            selectEscola.appendChild(op);
+        }); 
     }catch (error) {
-         console.error("Não foi possível carregar a estrutura da escola:", erro);
+         console.error("Não foi possível carregar a estrutura da escola:", error);
     }
         
     const params = new URLSearchParams(window.location.search);
-
     const filtro_escola = params.get('escola') || "";
     const filtro_curso = params.get('curso') || "";
     const filtro_ano = params.get('ano') || "";
@@ -53,9 +49,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         resetDropdown(selectCurso, 'Todos os Cursos...');
         resetDropdown(selectAno, 'Todos os Anos...');
         resetDropdown(selectDisciplina, 'Todas as Disciplinas...');
-
-
-          if (cursos && escola !== "") {
+        if (cursos && escola !== "") {
             selectCurso.disabled = false;
             selectCurso.style.backgroundColor = "white";
             Object.keys(cursos).forEach(curso => {

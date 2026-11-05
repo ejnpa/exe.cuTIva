@@ -1,0 +1,83 @@
+
+services:
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: proxy_gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/custom:ro
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro 
+    command: ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
+    depends_on:
+      - api
+    networks:
+      - webnet
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: executiva_api
+    restart: unless-stopped
+    env_file: .env
+    volumes: 
+      - media_data:/app/media
+    depends_on: 
+      db:
+        condition: service_healthy
+    networks:
+      - webnet
+      - backend
+
+  db:
+    image: postgres:15-alpine
+    env_file: .env
+    container_name: executiva_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-executiva_db}
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d ${DB_NAME:-executiva_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: executiva_storage
+    restart: unless-stopped
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azurite_data:/data
+    networks:
+      - backend
+      - webnet
+
+
+volumes:
+  pgdata:
+    external: true
+  azurite_data:
+    external: true
+  media_data:
+    external: true
+
+networks:
+  webnet:
+    external: true
+  backend:
+    external: true
+
+  

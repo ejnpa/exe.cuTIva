@@ -27,3 +27,9 @@ resolver o problema da informação dispersa e promover a colaboração académi
 * **Upload de Ficheiros:** Processamento e receção de ficheiros PDF.
 * **Processamento de Imagens:** Geração automática de miniaturas/capas para os documentos submetidos.
 * **API RESTful:** Endpoints estruturados para comunicação fluída com o frontend.
+
+## Configuração de segurança
+
+Define `SECRET_KEY` no ambiente da API com um valor aleatório e persistente (por exemplo, gerado com `python -c "import secrets; print(secrets.token_urlsafe(48))"`). A aplicação não inicia sem esta variável. `COOKIE_SECURE` é `true` por omissão; para desenvolvimento local por HTTP, define `COOKIE_SECURE=false`.
+
+Ao atualizar uma instalação antiga, depois de iniciar a nova versão executa uma vez `docker exec executiva_api python -m scripts.migrate_saved_artifacts` para copiar os itens guardados da tabela antiga para o esquema atual. A tabela antiga fica preservada.

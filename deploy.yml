@@ -1,0 +1,48 @@
+---
+- name : Deploy e atualização da plataforma exe.cuTIva
+  hosts: desktop
+  gather_facts: false
+  tasks:
+    - name: Garantir que a pasta de destino existe
+      ansible.builtin.file:
+        path: /home/emanuel/executiva
+        state: directory
+        owner: emanuel
+        group: emanuel
+        mode: '0755'
+
+
+    - name: Sincronizar o código-fonte da aplicação
+      ansible.posix.synchronize:
+        src: ./
+        dest: /home/emanuel/executiva/
+        delete: false
+        rsync_opts: 
+          - "--exclude=.git"
+          - "--exclude=__pycache__"
+          - "--exclude=.venv"
+          - "--exclude=node_modules"
+          - "--exclude=infrastructure/.terraform"
+          - "--exclude=media"
+          - "--exclude=*.pyc"
+          - "--exclude=.env"
+          - "--exclude= infrastructure/terraform.tfstate"
+          - "--exclude= infrastructure/.terraform"
+      become: false   
+      
+    - name: Reconstruir e levantar infraestrutura Docker
+      community.docker.docker_compose_v2:
+          project_src: /home/emanuel/executiva
+          state: present
+          build: always
+      become: false
+
+    - name: Limpar cache expirado
+      ansible.builtin.cron:
+        name: limpar cache da plataforma
+        user: emanuel
+        minute: "15"
+        hour: "3"
+        job: "docker exec -w /app executiva_api python -m scripts.clean_generated_cache"
+
+    

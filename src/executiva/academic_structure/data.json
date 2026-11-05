@@ -1,0 +1,111 @@
+{
+    "Escola Superior de Tecnologia (EST)": {
+        "Engenharia Informática": {
+            "1º Ano": [
+                "Álgebra Linear e Geometria Analítica",
+                "Algoritmos e Estruturas de Dados",
+                "Matemática para a Informática",
+                "Introdução à Teoria da Computação",
+                "Introdução à Programação",
+                "Programação Orientada a Objetos",
+                "Probabilidade e Estatística para a Informática",
+                "Sistemas Lógicos",
+                "Bases de Dados",
+                "Interfaces e Tecnologias Web",
+                "Interfaces Pessoa-Máquina"
+            ],
+            "2º Ano": [
+                "Arquitetura de Sistemas Computacionais",
+                "Padrões e Desenho de Software",
+                "Arquitetura de Computadores",
+                "Redes de Comunicação de Dados",
+                "Inteligência Artificial",
+                "Complementos de Bases de Dados",
+                "Modelação de Sistemas Informáticos",
+                "Engenharia de Software",
+                "Linguagens de Programação para a Internet",
+                "Informática Móvel",
+                "Arquitetura da Internet",
+                "Sistemas Operativos"
+            ],
+            "3º Ano": [
+                "Ciência de Dados",
+                "Internet das Coisas",
+                "Tecnologias da Internet",
+                "Engenharia de Sistemas de Informação",
+                "Segurança Informática",
+                "Aplicações Distribuídas",
+                "Cibersegurança",
+                "Computação em Nuvem",
+                "Big Data",
+                "Gestão de Projetos em Informática"
+            ]
+        },
+        "Informática e Multimédia ": {
+            "1º Ano": [
+                "Algoritmia e Programação",
+                "Design e Criatividade",
+                "Multimédia I",
+                "Arquitetura de Computadores",
+                "Lógica e Computação",
+                "Interfaces Pessoa-Máquina II",
+                "Probabilidade e Estatísticaa",
+                "Sistemas Operativos",
+                "Bases de Dados",
+                "Codificação de Sinais Multimédia",
+                "Interfaces Pessoa-Máquina I"
+            ],
+            "2º Ano": [
+                "Redes de Computadores",
+                "Padrões e Desenho de Software",
+                "Tecnologias de Produção e Edição de Áudio e Vídeo",
+                "Multimédia II",
+                "Fundamentos de Inteligência Artificial",
+                "Complementos de Bases de Dados",
+                "Modelação de Sistemas Informáticos",
+                "Programação para Dispositivos Móveis",
+                "Linguagens Web",
+                "Informática Móvel",
+                "Computação Gráfica",
+                "Inteligência Artificial"
+            ],
+            "3º Ano": [
+                "Linguagens de Organização de Dados",
+                "Arquitetura e Tecnologias Internet",
+                "Design de Sistemas Interativos",
+                "Sistemas de Informação nas Organizações",
+                "Aplicações Multimédia",
+                "Multimédia III",
+                "Arquitetura de Sistemas de Informação",
+                "Análise Inteligente de Dados"
+            ]
+        }
+    },
+    "Escola Superior de Educação (ESE)": {
+        "Educação Básica": {
+            "1º Ano": [
+                "Didática e Prática de Ensino",
+                "Psicologia da Educação",
+                "Sociologia da Educação",
+                "Políticas Educativas",
+                "Currículo e Avaliação",
+                "Tecnologias Educativas"
+            ],
+            "2º Ano": [
+                "Metodologias de Ensino",
+                "Educação Inclusiva",
+                "Gestão Escolar",
+                "Educação para a Cidadania",
+                "Educação Ambiental",
+                "Educação para a Saúde"
+            ],
+            "3º Ano": [
+                "Estágio Supervisionado I",
+                "Estágio Supervisionado II",
+                "Trabalho de Projeto em Educação",
+                "Tópicos Especiais em Educação"
+            ]
+        }
+    }
+
+}
