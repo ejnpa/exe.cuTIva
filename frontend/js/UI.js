@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+
 
 // 3. ALERTAS GLOBAIS
 window.showAlerts = function(message, type = 'sucesso') {
@@ -128,7 +128,7 @@ window.toggleLike = async function (button, noteId) {
         }
     }catch(error){
         console.error("Erro no toggleLike:", error);
-        window.showAlerts("Não foi possível atualizar o gosto.",
-            "erro");
+        window.showAlerts("Não foi possível atualizar o gosto.", "erro");
     }
-}
+};
+});

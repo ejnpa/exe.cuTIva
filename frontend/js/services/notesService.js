@@ -3,9 +3,15 @@
  * Responsável exclusiva pela comunicação HTTP com a API.
  */
 const notesService = {
-    async getall(){
+    async getAll(){
         const response = await fetch(`${API_BASE_URL}/notes/me`, { credentials: 'include'});
         if (!response.ok) throw new Error('Não foi possível carregar os teus apontamentos.');
+        return response.json();
+    },
+
+    async getById(noteId){
+        const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, { credentials: 'include'});
+        if (!response.ok) throw new Error('Não foi possível carregar o teu apontamento.');
         return response.json();
     },
 
@@ -15,12 +21,13 @@ const notesService = {
              credentials: 'include',
              signal
         });
-        if (!response.ok) throw new Error('Não foi possível gerar a versão inclusiva.');
+        if (!response.ok) throw new Error('Não foi possível gerar a resumo adaptado.');
         return response.blob();
     },
 
     getAudioUrl(noteId, type = 'original'){
-        return `${API_BASE_URL}/notes/${noteId}/audio?type=${encodeURIComponent(type)}`;
+        const params = new URLSearchParams({audio_type: type})
+        return `${API_BASE_URL}/notes/${encodeURIComponent(noteId)}/audio?${params}`;
     },
 
     async setLike(noteId, liked){
@@ -38,7 +45,7 @@ const notesService = {
             credentials: 'include'
         });
         if (!response.ok) throw new Error('Falha ao remover o apontamento.');
-        return response.ok;
+        return true;
     },
 
     async saveArtifact(noteId, kind, variant ){

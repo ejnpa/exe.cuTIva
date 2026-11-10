@@ -59,7 +59,7 @@ async function loadNotes() {
             grid.innerHTML = `
                 <div class="mensagem-vazia">
                     <p data-i18n="pesquisa-vazia">Ainda não partilhaste apontamentos.</p>
-                    <a href="upload.html" data-i18n="upload-titulo">Partilhar o primeiro →</a>
+                    <a href="/upload.html" data-i18n="upload-titulo">Partilhar o primeiro →</a>
                 </div>`;
             if (window.AppLanguage) window.AppLanguage.applyToHTML();
             return; 

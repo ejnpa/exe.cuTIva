@@ -1,4 +1,4 @@
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 from fastapi import (
     APIRouter,
@@ -25,18 +25,14 @@ from executiva.users.models import User
 
 router = APIRouter(prefix="/api/notes", tags=['Notes'] )
 
-def _require_note_owner(note, current_user: User) -> None:
-    """Confirma que o apontamento existe e pertence ao utilizador autenticado. Interrompe com HTTP 404 ou HTTP 403, respetivamente, se a condição não se verificar.
+def _require_note_exists(note) -> None:
+    """Confirma que o apontamento existe e pertence ao utilizador autenticado.
+     Interrompe com HTTP 404 ou HTTP 403, respetivamente, se a condição não se verificar.
     """
     if note is None:
         raise HTTPException(
             status_code=404,
             detail="Apontamento não encontrado"
-        )
-    if note.author != current_user.email:
-        raise HTTPException(
-            status_code=403,
-            detail="Não tem permissão para aceder a este apontamento"
         )
 
 @router.get("/structure")
@@ -112,11 +108,11 @@ def get_note_details(
 def read_note(
         note_id: str,
         service: NoteService = Depends(get_notes_service),
-        current_user: User = Depends(get_current_user)
+        _current_user: User = Depends(get_current_user)
 ):
     """Exige que o utilizador seja o autor, extrai o conteúdo textual do ficheiro e devolve os metadados juntamente com o texto.
     """
-    _require_note_owner(service.get_note_by_id(note_id), current_user)
+    _require_note_exists(service.get_note_by_id(note_id))
     note_data = service.read_note_content(note_id)
     if note_data is None:
         raise HTTPException(
@@ -130,11 +126,11 @@ def read_note(
 def view_note_file(
         note_id: str,
         service: NoteService = Depends(get_notes_service),
-        current_user: User = Depends(get_current_user),
+        _current_user: User = Depends(get_current_user),
 ):
     """Verifica a propriedade do apontamento, descarrega o ficheiro original e devolve-o inline com o tipo MIME correspondente a PDF ou DOCX.
     """
-    _require_note_owner(service.get_note_by_id(note_id), current_user)
+    _require_note_exists(service.get_note_by_id(note_id))
     data = service.prepare_download(note_id)
 
     if data is None:
@@ -158,15 +154,15 @@ def view_note_file(
 def view_note_thumbnail(
         note_id: str,
         service: NoteService = Depends(get_notes_service),
-        current_user: User = Depends(get_current_user),
+        _current_user: User = Depends(get_current_user),
 ):
     """Verifica a propriedade do apontamento e devolve a miniatura PNG através da API, sem tornar público o URL do blob.
     """
     note = service.get_note_by_id(note_id)
-    _require_note_owner(note, current_user)
+    _require_note_exists(note)
     if not note.thumbnail_url:
         raise HTTPException(status_code=404, detail="Miniatura não encontrada")
-    filename = note.thumbnail_url.rsplit("/", 1)[-1]
+    filename = unquote(note.thumbnail_url.rsplit("/", 1)[-1])
     try:
         data = service.storage.download_files_from_storage(filename)
     except Exception as exc:
@@ -185,11 +181,11 @@ def view_note_thumbnail(
 def download_note_file(
         note_id: str,
         service: NoteService = Depends(get_notes_service),
-        current_user: User = Depends(get_current_user)
+        _current_user: User = Depends(get_current_user)
 ):
     """Verifica a propriedade do apontamento e envia o documento como anexo, com um nome de ficheiro codificado para o cabeçalho HTTP.
     """
-    _require_note_owner(service.get_note_by_id(note_id), current_user)
+    _require_note_exists(service.get_note_by_id(note_id))
     """Vai buscar o ficheiro à Cloud e injeta-o na resposta como um anexo transferível."""
     data = service.prepare_download(note_id)
     if data is None:
@@ -228,11 +224,11 @@ def delete_note(
 def adapt_note(
         note_id: str,
         service: NoteService = Depends(get_notes_service),
-        current_user: User = Depends(get_current_user),
+        _current_user: User = Depends(get_current_user),
         artifacts: GeneratedArtifactService = Depends(get_generated_artifact_service)
 ):
     """Extrai o texto do ficheiro e envia para a IA formatar."""
-    _require_note_owner(service.get_note_by_id(note_id), current_user)
+    _require_note_exists(service.get_note_by_id(note_id))
     note_data = service.read_note_content(note_id)
 
     if note_data is None or not note_data['content']:
@@ -261,7 +257,7 @@ async def get_note_audio(
 ):
     """Verifica a propriedade e gera ou reutiliza áudio do texto original ou do resumo adaptado, consoante o parâmetro type.
     """
-    _require_note_owner(service.get_note_by_id(note_id), current_user)
+    _require_note_exists(service.get_note_by_id(note_id))
     note_data = service.read_note_content(note_id)
     if note_data is None or not note_data['content']:
         raise HTTPException(

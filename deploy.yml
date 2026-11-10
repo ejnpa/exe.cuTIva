@@ -20,14 +20,17 @@
         rsync_opts: 
           - "--exclude=.git"
           - "--exclude=__pycache__"
+          - "--exclude=.pytest_cache/"
           - "--exclude=.venv"
           - "--exclude=node_modules"
           - "--exclude=infrastructure/.terraform"
           - "--exclude=media"
           - "--exclude=*.pyc"
           - "--exclude=.env"
-          - "--exclude= infrastructure/terraform.tfstate"
-          - "--exclude= infrastructure/.terraform"
+          - "--exclude=infrastructure/terraform.tfstate"
+          - "--exclude=infrastructure/terraform.tfstate.backup"
+          - "--exclude=infrastructure/.terraform"
+          - "--exclude=infrastructure/terraform-state-backup.json"
       become: false   
       
     - name: Reconstruir e levantar infraestrutura Docker

@@ -10,61 +10,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="home-page">
-    <header class="home-header">
-        <div class="header-start">
-            <button class="hamburger-button" id="hamburger-button" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="side-menu"><span></span><span></span><span></span></button>
-            <a class="home-brand" href="index.html" aria-label="exe.cuTIva, página inicial"><span class="brand-mark">e.</span><span>exe.cuTIva</span></a>
-        </div>
-        <nav class="home-nav" aria-label="Navegação principal">
-            <a href="subjects.html" data-i18n="menu-explorar">Explorar</a>
-            <a href="#como-funciona" data-i18n="menu-como-funciona">Como funciona</a>
-            <a href="contacts.html" data-i18n="menu-contactos">Contactos</a>
-        </nav>
-        <div class="header-actions">
-            <!-- 1. Área de Autenticação -->
-            <div class="home-auth" id="area-auth">
-                <a class="home-login" href="login.html" data-i18n="btn-entrar">Entrar</a>
-                <a class="home-signup" href="register.html" data-i18n="btn-criar-conta">Criar conta</a>
-            </div>
 
-            <!-- 2. Seletor de Idiomas com Imagens Reais -->
-            <div class="language-picker">
-                <button class="language-toggle" id="language-toggle" type="button" aria-expanded="false" aria-controls="language-menu">
-                    <span class="language-globe" aria-hidden="true">🌐</span><span id="selected-language">PT</span><span class="language-chevron" aria-hidden="true">▾</span>
-                </button>
-                <div class="language-menu" id="language-menu" role="menu">
-                    <button type="button" class="language-option is-selected" data-language="pt-PT" data-label="PT" role="menuitem">
-                        <div class="lang-info">
-                            <!-- Imagem da bandeira PT -->
-                            <img src="https://flagcdn.com/pt.svg" alt="PT" class="lang-flag-img">
-                            <span>Português</span>
-                        </div>
-                        <small>PT</small>
-                    </button>
-                    <button type="button" class="language-option" data-language="en" data-label="EN" role="menuitem">
-                        <div class="lang-info">
-                            <!-- Imagem da bandeira UK -->
-                            <img src="https://flagcdn.com/gb.svg" alt="EN" class="lang-flag-img">
-                            <span>English</span>
-                        </div>
-                        <small>EN</small>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="menu-backdrop" id="menu-backdrop"></div>
-    <aside class="side-menu" id="side-menu" aria-label="Menu principal">
-        <div class="side-menu-top"><span class="side-menu-title" data-i18n="menu-titulo">Menu</span><button class="close-menu" id="close-menu" type="button" aria-label="Fechar menu">✕</button></div>
-        <nav class="side-menu-links">
-            <a href="index.html"><span class="side-menu-icon">🏠</span> <span data-i18n="menu-lateral-inicio">Página inicial</span></a>
-            <a href="subjects.html"><span class="side-menu-icon">📚</span> <span data-i18n="menu-lateral-explorar">Explorar materiais</span></a>
-            <a href="upload.html"><span class="side-menu-icon">⬆️</span> <span data-i18n="menu-lateral-partilhar">Partilhar apontamentos</span></a>
-            <a href="myNotes.html"><span class="side-menu-icon">📂</span> <span data-i18n="menu-lateral-meus">Os meus apontamentos</span></a>
-            <a href="contacts.html"><span class="side-menu-icon">✉️</span> <span data-i18n="menu-contactos">Contactos</span></a>
-        </nav>
-        <div class="side-menu-bottom"><p data-i18n="menu-slogan">Aprende. Partilha. Cresce.</p><a href="register.html"><span data-i18n="btn-conta-gratis">Criar conta gratuita</span> <span>→</span></a></div>
-    </aside>
     <main>
         <section class="study-hero">
             <div class="hero-copy">
@@ -93,9 +39,9 @@
         </section>
         <section class="steps-section"><div class="steps-copy"><p class="eyebrow"><span></span> <b data-i18n="home-eyebrow3">Simples e útil</b></p><h2 data-i18n="home-title3">Uma comunidade<br>que puxa por ti.</h2><p data-i18n="home-desc3">O conhecimento cresce quando é partilhado. Junta-te a estudantes que tornam cada semestre um pouco mais leve.</p><a href="register.html" class="dark-button"><span data-i18n="btn-conta-gratis">Criar conta gratuita</span> <span>→</span></a></div><ol class="steps-list"><li><span>01</span><div><h3 data-i18n="home-step1-title">Encontra</h3><p data-i18n="home-step1-desc">Pesquisa os materiais certos para a tua cadeira.</p></div></li><li><span>02</span><div><h3 data-i18n="home-step2-title">Aprende</h3><p data-i18n="home-step2-desc">Estuda ao teu ritmo, onde estiveres.</p></div></li><li><span>03</span><div><h3 data-i18n="home-step3-title">Partilha</h3><p data-i18n="home-step3-desc">Ajuda outros estudantes com os teus apontamentos.</p></div></li></ol></section>
     </main>
-    <footer class="home-footer"><a class="home-brand" href="index.html"><span class="brand-mark">e.</span><span>exe.cuTIva</span></a><p data-i18n="footer-slogan">Estudar melhor começa por partilhar.</p><small>© 2026 exe.cuTIva</small></footer>
-    
+
     <script src="../js/config.js"></script>
+    <script src="../js/components.js"></script>
     <script src="../js/language.js"></script>
     <script src="../js/UI.js"></script>
     <script src="../js/auth.js"></script>

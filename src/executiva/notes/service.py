@@ -69,6 +69,7 @@ class NoteService:
 
         if thumb_bytes:
             thumb_filename = f"thumb_{safe_filename}.png"
+            thumbnail_name = thumb_filename
             thumbnail_url = self.storage.upload_files_to_storage(
                 thumb_bytes,
                 thumb_filename

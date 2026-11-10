@@ -35,7 +35,7 @@ services:
       - backend
 
   db:
-    image: postgres:15-alpine
+    image: postgres:15.19-trixie
     env_file: .env
     container_name: executiva_db
     restart: unless-stopped

@@ -27,6 +27,7 @@ COPY --from=builder /opt/venv /opt/venv
 COPY --chown=appuser:appuser . .
 
 ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH="/app/src" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
@@ -34,4 +35,4 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "main:app"]
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "executiva.main:app"]

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Os meus apontamentos — exe.cuTIva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/style.css">
+    <script>
+        if(!localStorage.getItem('user')) {
+            window.location.replace('login.html') ;
+        }
+    </script>
+</head>
+<body class="app-page notes-page" data-requires-auth="true">
+
+  <main class="lista-apontamentos">
+      <div class="barra-topo-apontamentos">
+          <div>
+              <p class="app-eyebrow" data-i18n="mynotes-eyebrow">Área pessoal</p>
+              <h1 data-i18n="mynotes-title">Os meus apontamentos</h1>
+          </div>
+          <a class="app-header-cta" href="upload.html" data-i18n="upload-titulo">Partilhar material</a>
+      </div>
+      <div id="grelha-meus-apontamentos" class="grelha-cards">
+          <p class="loading-state" data-i18n="mynotes-loading">A carregar apontamentos...</p>
+      </div>
+  </main>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/language.js"></script>
+  <script src="../js/UI.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/services/notesService.js"></script>
+  <script src="../js/myNotes.js"></script>
+</body>
+</html>

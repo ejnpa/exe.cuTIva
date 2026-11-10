@@ -33,13 +33,3 @@ function renderAuthArea() {
     }
 }
 
-function protectPage() {
-    if (document.body.dataset.requiresAuth === 'true' && !getCurrentUser()) {
-        window.location.href = 'login.html';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    protectPage();
-    renderAuthArea();
-});

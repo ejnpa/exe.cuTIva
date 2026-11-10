@@ -6,7 +6,9 @@ load_dotenv()  # Carrega as variáveis de ambiente do ficheiro .env
 from executiva.db.session import SessionLocal, engine
 from executiva.db.base import Base
 from executiva.users.models import User
+from executiva.notes.models import Notes, NoteLike
 from executiva.core.security import get_password_hash
+
 
 
 def criar_utilizadores_teste():

@@ -65,7 +65,7 @@ def login(
         max_age= 60 * 60 * 24
     )
 
-    return{"message": "Login efetuado com sucesso."}
+    return{"message": "Login efetuado com sucesso.", "username": username}
 
 @router.post("/logout")
 def logout(response: Response):

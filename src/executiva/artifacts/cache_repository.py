@@ -76,7 +76,7 @@ class GeneratedCacheRepository:
                 cache_key=cache_key)
             .first()
         )
-        if existing is None:
+        if existing is not None:
             return
 
         note = self.db.query(Notes).filter_by(id=item.note_id).first()

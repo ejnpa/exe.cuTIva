@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar conta — exe.cuTIva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="app-page auth-page">
+
+
+  
+  <main class="auth-main"><section class="auth-card">
+    <p class="app-eyebrow" data-i18n="register-eyebrow">Começa hoje</p><h1 data-i18n="register-title">Cria a tua conta.</h1>
+    <p class="auth-intro" data-i18n="register-desc">Partilha, descobre e organiza os teus melhores materiais de estudo.</p>
+    <p id="mensagem-erro" class="form-message" role="alert"></p>
+    <form id="form-register" class="app-form">
+      <label for="nome" data-i18n="contact-name">Nome completo</label><input id="nome" type="text" autocomplete="name" required>
+      <label for="email" data-i18n="contact-email">Email</label><input id="email" type="email" autocomplete="email" required>
+      <label for="password" data-i18n="login-pass">Palavra-passe</label><input id="password" type="password" autocomplete="new-password" required>
+      <label for="confirm_password" data-i18n="register-confirm-pass">Confirmar palavra-passe</label><input id="confirm_password" type="password" autocomplete="new-password" required>
+      <button class="app-primary-button" type="submit"><span data-i18n="btn-criar-conta">Criar conta</span> <span>→</span></button>
+    </form>
+    <p class="auth-switch"><span data-i18n="register-has-account">Já tens conta?</span> <a href="login.html" data-i18n="register-login">Inicia sessão</a></p>
+  </section></main>
+
+
+
+    <script src="../js/config.js"></script>
+  <script src="../js/components.js"></script>
+    <script src="../js/language.js"></script>
+    <script src="../js/UI.js"></script>
+    <script src="../js/auth.js"></script>
+    
+  <script>
+      const registerForm = document.getElementById("form-register")
+      const usernameInput = document.getElementById("nome");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const confirmPasswordInput = document.getElementById("confirm_password");
+      const errorMessage = document.getElementById('mensagem-erro');
+    registerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      errorMessage.textContent = '';
+      if (passwordInput.value !== confirmPasswordInput.value) { errorMessage.textContent = 'As palavras-passe não coincidem.'; return; }
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: usernameInput.value,
+                email: emailInput.value,
+                password: passwordInput.value
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Não foi possível criar a conta.');
+        window.location.href = 'login.html';
+      } catch (error) { errorMessage.textContent = error.message; }
+    });
+  </script>
+</body>
+</html>

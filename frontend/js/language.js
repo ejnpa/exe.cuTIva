@@ -4,14 +4,10 @@ class LanguageManager {
             return LanguageManager.instance;
         }
 
-        let savedLang = localStorage.getItem('preferred_language');
+        const savedLang = localStorage.getItem('preferred_language');
+        this.currentLang = ["pt-PT", "en"].includes(savedLang)?savedLang:'pt-PT';
 
-        if (!savedLang || savedLang === 'null' || savedLang === 'undefined') {
-            savedLang = 'pt-PT';
-            localStorage.setItem('preferred_language', 'pt-PT');
-        }
-
-        this.currentLang = savedLang;
+        localStorage.setItem('preferred_language', this.currentLang);
 
         this.dictionary = { };
         LanguageManager.instance = this;
@@ -19,19 +15,24 @@ class LanguageManager {
 
     async loadDictionary(){
         try{
-            const response = await fetch(`locales/${this.currentLang}.json`);
+            const response = await fetch(
+                `locales/${encodeURIComponent(this.currentLang)}.json`
+            );
+
+            if (!response.ok) throw new Error(`Erro ao carregar ficheiro de idioma: ${response.status}`);
+
             this.dictionary = await response.json();
             this.applyToHTML();
         }catch(error){
             console.error("Erro ao carregar ficheiro de idioma:", error)
-        };
+        }
     };
 
     async setLanguage(lang) {
-        
+        if (!["pt-PT", "en"].includes(lang)) return;
         this.currentLang = lang;
         localStorage.setItem('preferred_language', lang);
-        this.loadDictionary();
+        await this.loadDictionary();
         
     }
 
@@ -42,12 +43,15 @@ class LanguageManager {
     applyToHTML() {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
-            const languageStr = this.get(key);
+            const translation = this.get(key);
 
-            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                element.placeholder = languageStr;
+            if (
+                element.tagName === 'INPUT' ||
+                element.tagName === 'TEXTAREA'
+            ){
+                element.placeholder = translation;
             } else {
-                element.innerHTML = languageStr;
+                element.innerHTML = translation;
             }
         });
     }
@@ -55,5 +59,3 @@ class LanguageManager {
 
 window.AppLanguage = new LanguageManager();
 window.AppLanguage.loadDictionary();
-
-console.log("✅ Dicionário carregado! Idioma atual:", window.AppLanguage.currentLang);
